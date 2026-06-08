@@ -20,11 +20,11 @@ Replace the images below with your own screenshots before publishing.
 
 | Main Organizer | Quick Custom Folder |
 |---|---|
-| ![Main organizer screenshot](docs/images/main-organizer.png) | ![Quick custom folder screenshot](docs/images/quick-custom-folder.png) |
+| ![Main organizer screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/interface%20(2).png) | ![Quick custom folder screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/2.png) |
 
 | Selective Extraction | Windows Context Menu |
 |---|---|
-| ![Selective extraction screenshot](docs/images/selective-extraction.png) | ![Context menu screenshot](docs/images/context-menu.png) |
+| ![Selective extraction screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/3.png) | ![Context menu screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/1.png)) |
 
 ## Why This Exists
 
