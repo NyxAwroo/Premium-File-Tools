@@ -1,5 +1,8 @@
 # Outils Fichiers Premium
 
+  **✨[Soutenez le projet](https://www.paypal.com/paypalme/NyxAwroo)**
+
+
 ![Windows](https://img.shields.io/badge/Windows-10%20%2F%2011-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Tkinter](https://img.shields.io/badge/UI-Tkinter%20%2F%20ttk-2B579A?style=for-the-badge)
@@ -173,3 +176,17 @@ README.fr.md        Documentation française
 ## Avertissement
 
 L'outil modifie des entrées du registre Windows pendant l'installation afin d'ajouter le menu contextuel. Lis le code avant un déploiement large.
+
+---
+### 💛 Soutenez le projet
+Premium File Tools est gratuit. Vous pouvez soutenir son développement par un don.
+
+**Lien pour faire un don :** [PayPal](https://www.paypal.com/paypalme/NyxAwroo) 
+// Les dons permettent de financer le développement, les tests, la documentation et les améliorations futures. Un grand merci à tous les contributeurs 🙏
+
+---
+
+## Credits
+
+Made by NyxAwroo
+
