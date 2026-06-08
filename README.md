@@ -18,8 +18,6 @@ Instead of opening heavy file managers, writing scripts, or dragging files manua
 
 ## Screenshots
 
-Replace the images below with your own screenshots before publishing.
-
 | Main Organizer | Quick Custom Folder |
 |---|---|
 | ![Main organizer screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/interface%20(2).png) | ![Quick custom folder screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/2.png) |
