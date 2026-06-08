@@ -20,11 +20,11 @@ Remplace les images ci-dessous par tes propres captures avant publication.
 
 | Interface principale | Dossier personnalisé rapide |
 |---|---|
-| ![Capture interface principale](docs/images/main-organizer.png) | ![Capture dossier personnalisé](docs/images/quick-custom-folder.png) |
+| ![Main organizer screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/interface%20(2).png) | ![Quick custom folder screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/2.png) |
 
 | Extraction sélective | Menu contextuel Windows |
 |---|---|
-| ![Capture extraction sélective](docs/images/selective-extraction.png) | ![Capture menu contextuel](docs/images/context-menu.png) |
+| ![Selective extraction screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/3.png) | ![Context menu screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/1.png)) |
 
 ## Pourquoi Cet Outil Existe
 
