@@ -1,5 +1,7 @@
 # Premium File Tools
 
+  **✨[Sponsor this project](https://www.paypal.com/paypalme/NyxAwroo)**
+
 ![Windows](https://img.shields.io/badge/Windows-10%20%2F%2011-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.x-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![Tkinter](https://img.shields.io/badge/UI-Tkinter%20%2F%20ttk-2B579A?style=for-the-badge)
@@ -173,3 +175,17 @@ README.fr.md        French documentation
 ## Disclaimer
 
 This tool modifies Windows context menu registry entries during installation. Review the code before use if you plan to deploy it broadly.
+
+---
+### 💛 Support the project
+InstaLocalPlanner is a free, open project developed on personal time. If it helps your Instagram workflow, you can support its development with a donation.
+
+**Donation link:** [PayPal](https://www.paypal.com/paypalme/NyxAwroo) 
+// Donations help fund development time, testing, documentation and future improvements. Huge thanks to anyone who contributes 🙏
+
+---
+
+## Credits
+
+Made by NyxAwroo
+
