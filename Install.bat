@@ -5,6 +5,21 @@ title Premium File Tools - Installer
 cd /d "%~dp0"
 
 set "SCRIPT=%~dp0Outils_Fichiers.py"
+set "INSTALL_LANG=%~2"
+
+if /I "%~1"=="--lang" (
+    if /I "%INSTALL_LANG%"=="fr" goto :lang_ok
+    if /I "%INSTALL_LANG%"=="en" goto :lang_ok
+    set "INSTALL_LANG="
+)
+
+if "%INSTALL_LANG%"=="" (
+    for /f "usebackq delims=" %%L in (`powershell -NoProfile -ExecutionPolicy Bypass -Command "$p=Join-Path $env:APPDATA 'OutilsFichiersPremium\config.json'; if(Test-Path $p){try{(Get-Content $p -Raw | ConvertFrom-Json).language}catch{''}}"`) do set "INSTALL_LANG=%%L"
+)
+
+if /I not "%INSTALL_LANG%"=="fr" if /I not "%INSTALL_LANG%"=="en" set "INSTALL_LANG="
+
+:lang_ok
 
 if not exist "%SCRIPT%" (
     echo.
@@ -18,7 +33,7 @@ if not exist "%SCRIPT%" (
 net session >nul 2>&1
 if not "%errorlevel%"=="0" (
     echo Requesting administrator rights...
-    powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath '%~f0' -Verb RunAs"
+    powershell -NoProfile -ExecutionPolicy Bypass -Command "Start-Process -FilePath '%~f0' -ArgumentList '--lang','%INSTALL_LANG%' -Verb RunAs"
     exit /b
 )
 
@@ -28,17 +43,26 @@ echo   Premium File Tools / Outils Fichiers
 echo ==========================================
 echo.
 echo Installing Windows context menu entries...
+if not "%INSTALL_LANG%"=="" echo Language: %INSTALL_LANG%
 echo.
 
 where py >nul 2>&1
 if "%errorlevel%"=="0" (
-    py -3 "%SCRIPT%"
+    if "%INSTALL_LANG%"=="" (
+        py -3 "%SCRIPT%"
+    ) else (
+        py -3 "%SCRIPT%" --install-lang "%INSTALL_LANG%"
+    )
     goto :done
 )
 
 where python >nul 2>&1
 if "%errorlevel%"=="0" (
-    python "%SCRIPT%"
+    if "%INSTALL_LANG%"=="" (
+        python "%SCRIPT%"
+    ) else (
+        python "%SCRIPT%" --install-lang "%INSTALL_LANG%"
+    )
     goto :done
 )
 

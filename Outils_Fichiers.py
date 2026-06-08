@@ -44,6 +44,7 @@ I18N = {
         "menu_gui": "Organiser (Interface Graphique)...",
         "menu_custom": "Rapide : Dossier personnalisé...",
         "menu_1to1": "Rapide : 1 Fichier = 1 Dossier",
+        "menu_1item_to_1folder": "Rapide : 1 Élément = 1 Dossier",
         "menu_smart": "Rapide : Catégories Intelligentes",
         "menu_ext": "Rapide : Grouper par Extension",
         "menu_date_ym": "Rapide : Grouper par Mois (ex: 2024-04)",
@@ -159,6 +160,7 @@ I18N = {
         "menu_gui": "Organize (Graphical Interface)...",
         "menu_custom": "Quick: Custom folder...",
         "menu_1to1": "Quick: 1 File = 1 Folder",
+        "menu_1item_to_1folder": "Quick: 1 Item = 1 Folder",
         "menu_smart": "Quick: Smart Categories",
         "menu_ext": "Quick: Group by Extension",
         "menu_date_ym": "Quick: Group by Month (e.g. 2024-04)",
@@ -452,19 +454,31 @@ def is_admin():
     try: return ctypes.windll.shell32.IsUserAnAdmin()
     except: return False
 
-def run_as_admin():
-    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, f'"{SCRIPT_PATH}"', None, 1)
+def run_as_admin(lang=None):
+    args = f'"{SCRIPT_PATH}"'
+    if lang in ("fr", "en"):
+        args += f' --install-lang {lang}'
+    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, args, None, 1)
 
-def install_context_menu():
+def install_context_menu(lang_override=None):
     if not is_admin():
-        run_as_admin()
+        run_as_admin(lang_override or get_language())
         sys.exit()
-    lang = get_language()
+    lang = lang_override if lang_override in ("fr", "en") else get_language()
 
     legacy_keys = [
+        r"HKCR\AllFilesystemObjects\shell\OutilsFichiers",
+        r"HKCU\Software\Classes\AllFilesystemObjects\shell\OutilsFichiers",
+        r"HKLM\Software\Classes\AllFilesystemObjects\shell\OutilsFichiers",
         r"HKCR\*\shell\OutilsFichiers",
+        r"HKCU\Software\Classes\*\shell\OutilsFichiers",
+        r"HKLM\Software\Classes\*\shell\OutilsFichiers",
         r"HKCR\Directory\Background\shell\OutilsFichiers",
+        r"HKCU\Software\Classes\Directory\Background\shell\OutilsFichiers",
+        r"HKLM\Software\Classes\Directory\Background\shell\OutilsFichiers",
         r"HKCR\Directory\shell\OutilsFichiers",
+        r"HKCU\Software\Classes\Directory\shell\OutilsFichiers",
+        r"HKLM\Software\Classes\Directory\shell\OutilsFichiers",
         r"HKCR\Folder\shell\OutilsFichiers",
         r"HKCR\Folder\shell\OutilsFichiersCopyEmptyDirs",
         r"HKCU\Software\Classes\Folder\shell\OutilsFichiers",
@@ -546,6 +560,91 @@ def install_context_menu():
     set_value(f"{base_file}\\shell\\08_prefix", "Icon", "shell32.dll,-253")
     create_key(f"{base_file}\\shell\\08_prefix\\command")
     set_value(f"{base_file}\\shell\\08_prefix\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate prefix "%1"')
+
+    # --- MENU SUR SÉLECTIONS MASSIVES / MIXTES (FICHIERS + DOSSIERS) ---
+    # Explorer bascule parfois vers AllFilesystemObjects pour les grosses
+    # sélections ou les sélections mixtes. Sans cette branche, Windows peut
+    # ressortir une ancienne langue ou d'anciens libellés.
+    base_all = r"AllFilesystemObjects\shell\OutilsFichiers"
+    create_key(base_all)
+    set_value(base_all, "MUIVerb", tr("app_name", lang))
+    set_value(base_all, "Icon", "imageres.dll,-103")
+    set_value(base_all, "MultiSelectModel", "Player")
+    set_value(base_all, "SubCommands", "")
+
+    create_key(f"{base_all}\\shell\\01_GUI")
+    set_value(f"{base_all}\\shell\\01_GUI", "MUIVerb", tr("menu_gui", lang))
+    set_value(f"{base_all}\\shell\\01_GUI", "Icon", "imageres.dll,-103")
+    create_key(f"{base_all}\\shell\\01_GUI\\command")
+    set_value(f"{base_all}\\shell\\01_GUI\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate gui "%1"')
+
+    create_key(f"{base_all}\\shell\\01a_custom")
+    set_value(f"{base_all}\\shell\\01a_custom", "MUIVerb", tr("menu_custom", lang))
+    set_value(f"{base_all}\\shell\\01a_custom", "Icon", "imageres.dll,-112")
+    create_key(f"{base_all}\\shell\\01a_custom\\command")
+    set_value(f"{base_all}\\shell\\01a_custom\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate custom_prompt "%1"')
+
+    create_key(f"{base_all}\\shell\\02_1to1")
+    set_value(f"{base_all}\\shell\\02_1to1", "MUIVerb", tr("menu_1item_to_1folder", lang))
+    set_value(f"{base_all}\\shell\\02_1to1", "Icon", "shell32.dll,-44")
+    set_value(f"{base_all}\\shell\\02_1to1", "CommandFlags", 32, winreg.REG_DWORD)
+    create_key(f"{base_all}\\shell\\02_1to1\\command")
+    set_value(f"{base_all}\\shell\\02_1to1\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate 1to1 "%1"')
+
+    create_key(f"{base_all}\\shell\\03_smart")
+    set_value(f"{base_all}\\shell\\03_smart", "MUIVerb", tr("menu_smart", lang))
+    set_value(f"{base_all}\\shell\\03_smart", "Icon", "imageres.dll,-109")
+    create_key(f"{base_all}\\shell\\03_smart\\command")
+    set_value(f"{base_all}\\shell\\03_smart\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate smart "%1"')
+
+    create_key(f"{base_all}\\shell\\04_ext")
+    set_value(f"{base_all}\\shell\\04_ext", "MUIVerb", tr("menu_ext", lang))
+    set_value(f"{base_all}\\shell\\04_ext", "Icon", "imageres.dll,-114")
+    create_key(f"{base_all}\\shell\\04_ext\\command")
+    set_value(f"{base_all}\\shell\\04_ext\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate ext "%1"')
+
+    create_key(f"{base_all}\\shell\\05_date_ym")
+    set_value(f"{base_all}\\shell\\05_date_ym", "MUIVerb", tr("menu_date_ym", lang))
+    set_value(f"{base_all}\\shell\\05_date_ym", "Icon", "imageres.dll,-112")
+    create_key(f"{base_all}\\shell\\05_date_ym\\command")
+    set_value(f"{base_all}\\shell\\05_date_ym\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate date_ym "%1"')
+
+    create_key(f"{base_all}\\shell\\06_size")
+    set_value(f"{base_all}\\shell\\06_size", "MUIVerb", tr("menu_size", lang))
+    set_value(f"{base_all}\\shell\\06_size", "Icon", "imageres.dll,-110")
+    create_key(f"{base_all}\\shell\\06_size\\command")
+    set_value(f"{base_all}\\shell\\06_size\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate size "%1"')
+
+    create_key(f"{base_all}\\shell\\07_alpha")
+    set_value(f"{base_all}\\shell\\07_alpha", "MUIVerb", tr("menu_alpha", lang))
+    set_value(f"{base_all}\\shell\\07_alpha", "Icon", "shell32.dll,-137")
+    create_key(f"{base_all}\\shell\\07_alpha\\command")
+    set_value(f"{base_all}\\shell\\07_alpha\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate alpha "%1"')
+
+    create_key(f"{base_all}\\shell\\08_prefix")
+    set_value(f"{base_all}\\shell\\08_prefix", "MUIVerb", tr("menu_prefix", lang))
+    set_value(f"{base_all}\\shell\\08_prefix", "Icon", "shell32.dll,-253")
+    create_key(f"{base_all}\\shell\\08_prefix\\command")
+    set_value(f"{base_all}\\shell\\08_prefix\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate prefix "%1"')
+
+    create_key(f"{base_all}\\shell\\09_Extract")
+    set_value(f"{base_all}\\shell\\09_Extract", "MUIVerb", tr("menu_extract", lang))
+    set_value(f"{base_all}\\shell\\09_Extract", "Icon", "imageres.dll,-102")
+    set_value(f"{base_all}\\shell\\09_Extract", "CommandFlags", 32, winreg.REG_DWORD)
+    create_key(f"{base_all}\\shell\\09_Extract\\command")
+    set_value(f"{base_all}\\shell\\09_Extract\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate extract "%1"')
+
+    create_key(f"{base_all}\\shell\\09b_Extract1Level")
+    set_value(f"{base_all}\\shell\\09b_Extract1Level", "MUIVerb", tr("menu_extract_1_level", lang))
+    set_value(f"{base_all}\\shell\\09b_Extract1Level", "Icon", "imageres.dll,-102")
+    create_key(f"{base_all}\\shell\\09b_Extract1Level\\command")
+    set_value(f"{base_all}\\shell\\09b_Extract1Level\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate extract_1_level "%1"')
+
+    create_key(f"{base_all}\\shell\\10_Clean")
+    set_value(f"{base_all}\\shell\\10_Clean", "MUIVerb", tr("menu_clean", lang))
+    set_value(f"{base_all}\\shell\\10_Clean", "Icon", "imageres.dll,-53")
+    create_key(f"{base_all}\\shell\\10_Clean\\command")
+    set_value(f"{base_all}\\shell\\10_Clean\\command", "", f'"{PYTHONW_EXE}" "{SCRIPT_PATH}" --accumulate clean "%1"')
 
     # --- MENU SUR LES DOSSIERS SÉLECTIONNÉS (Cascade Clic Droit) ---
     base_dir = r"Directory\shell\OutilsFichiers"
@@ -1875,6 +1974,10 @@ if __name__ == "__main__":
             
         elif action == "--undo":
             undo_last_action()
+
+        elif action == "--install-lang":
+            lang = sys.argv[2] if len(sys.argv) > 2 else get_language()
+            install_context_menu(lang)
             
         elif action == "--extract":
             # Si appelé de manière détournée sans accumulateur
