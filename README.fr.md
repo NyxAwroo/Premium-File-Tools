@@ -19,8 +19,6 @@ Au lieu d'ouvrir un gestionnaire lourd, d'écrire des scripts ou de déplacer de
 
 ## Captures d'écran
 
-Remplace les images ci-dessous par tes propres captures avant publication.
-
 | Interface principale | Dossier personnalisé rapide |
 |---|---|
 | ![Main organizer screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/interface%20(2).png) | ![Quick custom folder screenshot](https://github.com/NyxAwroo/Premium-File-Tools/blob/5b4806349630f3d094f29209d76ea81bbc005aa9/screenshots/2.png) |
